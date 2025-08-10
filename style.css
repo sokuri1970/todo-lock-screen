@@ -1,0 +1,154 @@
+,/* 기본 세팅 */
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+  color: #fff;
+}
+
+/* 잠금 화면 */
+.lock-screen {
+  position: relative;
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  justify-items: center;
+  padding:
+    env(safe-area-inset-top)
+    env(safe-area-inset-right)
+    env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+  /* 배경: 필요시 이미지로 교체: background: url('wallpaper.jpg') center/cover no-repeat; */
+  background: radial-gradient(1200px 1200px at 20% 10%, #2b5cff 0%, rgba(43,92,255,0) 40%),
+              linear-gradient(180deg, #0b1020 0%, #121739 100%);
+  overflow: hidden;
+}
+
+/* 상단 시간/날짜 */
+.status {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 0.4rem;
+}
+.time {
+  text-align: center;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-top: 6vh;
+  font-size: clamp(56px, 16vw, 104px);
+}
+.date {
+  text-align: center;
+  opacity: 0.9;
+  margin-top: 0.4rem;
+  font-size: clamp(14px, 3.8vw, 18px);
+}
+
+/* 중앙 위젯: 오늘의 할 일 */
+.widget.widget-todo {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  place-self: center;
+  width: min(90vw, 420px);
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+.widget.widget-todo h2 {
+  margin: 0 0 10px;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  opacity: 0.95;
+}
+.widget.widget-todo ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  /* 항목이 많을 때 카드 내부만 스크롤 */
+  max-height: clamp(180px, 40vh, 420px);
+  overflow-x: hidden;
+  overflow-y: scroll; /* 항상 스크롤바 트랙을 보여 드래그 가능 */
+  scrollbar-gutter: stable both-edges;
+  padding-right: 2px; /* 스크롤바 여백 */
+  /* Firefox 기본 스크롤바 얇게 */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,.35) transparent;
+  /* 모바일 터치 스크롤 최적화 */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+
+/* WebKit(Chrome/Edge) 스크롤바 커스터마이즈 */
+.widget.widget-todo ul::-webkit-scrollbar { width: 8px; }
+.widget.widget-todo ul::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,.35);
+  border-radius: 8px;
+}
+.widget.widget-todo ul::-webkit-scrollbar-track { background: transparent; }
+.widget.widget-todo li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.08);
+}
+.widget.widget-todo li::before {
+  content: "•";
+  font-size: 18px;
+  line-height: 1;
+  opacity: 0.9;
+}
+
+/* 하단 스와이프 힌트 */
+.swipe-hint {
+  position: relative;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  margin: 3.5vh 0;
+  justify-self: center;
+  opacity: 0.75;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+}
+
+/* 작은 화면 최적화 */
+@media (max-width: 360px) {
+  .widget.widget-todo { padding: 14px 14px; }
+  .widget.widget-todo li { padding: 7px 8px; }
+}
+
+/* 가로(landscape) 화면 대응: 시계와 위젯 겹침 방지 */
+@media (orientation: landscape) {
+  .time {
+    margin-top: 2vh;
+    font-size: clamp(36px, 12vh, 72px);
+  }
+  .date {
+    font-size: clamp(12px, 2.4vw, 16px);
+  }
+  .widget.widget-todo {
+    width: min(80vw, 560px);
+    padding: 14px 16px;
+    /* 가로 모드에서도 내부 스크롤 유지 */
+    max-height: min(60vh, 420px);
+  }
+}
+
+/* 아주 낮은 높이의 가로 화면 추가 보정 */
+@media (max-height: 420px) and (orientation: landscape) {
+  .time { font-size: 32px; }
+}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Lock Screen - 오늘의 할 일</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="lock-screen" role="main">
+    <header class="status">
+      <div class="time" aria-label="현재 시간">09:41</div>
+      <div class="date" aria-label="오늘 날짜">9월 12일 목요일</div>
+    </header>
+
+    <section class="widget widget-todo" aria-label="오늘의 할 일">
+      <h2>오늘의 할 일</h2>
+      <ul>
+        <li>출근 보고서 제출</li>
+        <li>디자인 리뷰</li>
+        <li>저녁 장보기</li>
+        <li>아침 장보기</li>
+        <li>점심 장보기</li>
+        <li>다이소 장보기</li>
+        <li>마트 장보기</li>
+        <li>슈퍼 장보기</li>
+        <li>저녁 장보기</li>
+        <li>저녁 장보기</li>
+      </ul>
+    </section>
+
+    <div class="swipe-hint">상단으로 스와이프</div>
+  </main>
+  <script>
+    (function() {
+      const timeEl = document.querySelector('.time');
+      const dateEl = document.querySelector('.date');
+
+      function render() {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        timeEl.textContent = `${h}:${m}`;
+        const options = { month: 'numeric', day: 'numeric', weekday: 'long' };
+        dateEl.textContent = now.toLocaleDateString('ko-KR', options);
+      }
+
+      function scheduleNextTick() {
+        const now = new Date();
+        const msUntilNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+        setTimeout(() => {
+          render();
+          setInterval(render, 60 * 1000);
+        }, Math.max(msUntilNextMinute, 0));
+      }
+
+      render();
+      scheduleNextTick();
+    })();
+  </script>
+</body>
+</html>
